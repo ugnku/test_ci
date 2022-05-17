@@ -2,6 +2,7 @@
     "name": "ugnku/test_ci",
     "description": "Test GitHub test CI",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Eugene V. Kudryavtsev",
