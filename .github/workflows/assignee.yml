@@ -1,6 +1,9 @@
 name: 'Auto assign assignees or reviewers'
 on: pull_request
 
+permission:
+  contents: read
+
 jobs:
   add-reviews:
     name: "Auto assignment of a assignee"
@@ -8,4 +11,4 @@ jobs:
     steps:
       - uses: kentaro-m/auto-assign-action@v1.1.2
         with:
-          configuration-path: "assignee.config.yml"
+          configuration-path: "./github/assignee.config.yml"

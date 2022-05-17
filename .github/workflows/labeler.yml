@@ -2,6 +2,9 @@ name: "Auto labeling for a pull request"
 on:
   - pull_request_target
 
+permission:
+  content: read
+
 jobs:
   triage:
     name: "Checking for labels"
@@ -11,4 +14,4 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
-          configuration-path: "labeler.config.yml"
+          configuration-path: ".github/labeler.config.yml"
