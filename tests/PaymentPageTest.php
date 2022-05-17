@@ -17,9 +17,10 @@ class PaymentPageTest extends TestCase
         $payment = new Payment(100);
 
         $payment
-            ->setBaseurl($baseUrl)
             ->setPaymentId('test payment id')
             ->setPaymentDescription('B&W');
+
+        $paymentPage->setBaseUrl($baseUrl);
 
         $url = $paymentPage->getUrl($payment);
 
