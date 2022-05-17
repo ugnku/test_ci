@@ -4,8 +4,8 @@ template: |
 change-template: '- **$TITLE** (#$NUMBER)'
 
 version-template: "$MAJOR.$MINOR.$PATCH"
-name-template: 'v$RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
+name-template: '$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
 
 categories:
   - title: 'Features'

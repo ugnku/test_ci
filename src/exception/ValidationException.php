@@ -17,12 +17,23 @@ class ValidationException extends Exception implements SdkException
      */
     private array $errors;
 
+    /**
+     * Validation exception constructor.
+     *
+     * @param array $errors
+     * @param ?Throwable $previous
+     */
     public function __construct(array $errors, Throwable $previous = null)
     {
         $this->errors = $errors;
         parent::__construct(self::MESSAGE, self::VALIDATION_ERROR, $previous);
     }
 
+    /**
+     * Return validation errors.
+     *
+     * @return array
+     */
     final public function getErrors(): array
     {
         return $this->errors;
