@@ -15,7 +15,7 @@ permissions:
 
 env:
   COVERAGE: '1'
-  php_extensions: 'json http'
+  php_extensions: 'json, http'
 
 jobs:
   build:
