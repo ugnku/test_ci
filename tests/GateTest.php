@@ -18,12 +18,12 @@ class GateTest extends \PHPUnit\Framework\TestCase
      */
     private $gate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->gate = new Gate('secret', $this->testUrl);
     }
 
-    public function testGetPurchasePaymentPageUrl()
+    public function testGetPurchasePaymentPageUrl(): void
     {
         $payment = (new Payment(100))->setPaymentId('test payment id');
         $paymentUrl = $this->gate->getPurchasePaymentPageUrl($payment);
@@ -32,7 +32,7 @@ class GateTest extends \PHPUnit\Framework\TestCase
         self::assertStringStartsWith($this->testUrl, $paymentUrl);
     }
 
-    public function testSetPaymentBaseUrl()
+    public function testSetPaymentBaseUrl(): void
     {
         $someTestUrl = 'http://some-test-url.test/test';
 
@@ -43,7 +43,7 @@ class GateTest extends \PHPUnit\Framework\TestCase
         self::assertStringStartsWith($someTestUrl, $paymentUrl);
     }
 
-    public function testHandleCallback()
+    public function testHandleCallback(): void
     {
         $callback = $this->gate->handleCallback(require __DIR__ . '/data/callback.php');
 
