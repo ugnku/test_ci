@@ -2,13 +2,8 @@ name: Test coverage
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-      - synchronize
+    branches:
+      - master
 
 permissions:
   contents: read

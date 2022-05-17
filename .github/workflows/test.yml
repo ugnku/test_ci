@@ -49,6 +49,5 @@ jobs:
         run: |
           ./vendor/bin/phpunit \
             --verbose \
-            --stderr \
-            --coverage-clover build/logs/clover.xml
+            --stderr
         working-directory: './'
