@@ -70,13 +70,11 @@ jobs:
         working-directory: './'
       - name: 'Run Unit Tests with PHPUnit'
         continue-on-error: false
-        run: |
-          sed -e phpunit.xml.dist > phpunit.xml
-          ./vendor/bin/phpunit \
-            --verbose \
-            --stderr \
-            --coverage-clover build/logs/clover.xml
-        working-directory: './'
+        uses: php-actions/phpunit@v2
+        with:
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml.dist
+          args: --coverage-text --coverage-clover build/logs/clover.xml
       - name: 'Upload coverage results to Coveralls'
         if: ${{ !matrix.experimental }}
         env:
