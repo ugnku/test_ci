@@ -4,8 +4,8 @@ template: |
 change-template: '- **$TITLE** (#$NUMBER)'
 
 version-template: "$MAJOR.$MINOR.$PATCH"
-name-template: '$RESOLVED_VERSION'
-tag-template: '$RESOLVED_VERSION'
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
 
 categories:
   - title: 'Features'
@@ -31,21 +31,21 @@ change-title-escapes: '\<*_&'
 version-resolver:
   major:
     labels:
-      - major
-      - refactoring
+      - 'major'
+      - 'refactoring'
   minor:
     labels:
-      - feature
-      - minor
-      - type:common
+      - 'feature'
+      - 'minor'
+      - 'type:common'
   patch:
     labels:
-      - patch
-      - type:build
-      - bug
-      - bugfix
-      - hotfix
-      - fix
-      - theme:docs
-      - type:tests
-  default: patch
+      - 'patch'
+      - 'type:build'
+      - 'bug'
+      - 'bugfix'
+      - 'hotfix'
+      - 'fix'
+      - 'theme:docs'
+      - 'type:tests'
+  default: 'patch'
