@@ -31,21 +31,21 @@ change-title-escapes: '\<*_&'
 version-resolver:
   major:
     labels:
-      - major
-      - refactoring
+      - 'major'
+      - 'refactoring'
   minor:
     labels:
-      - feature
-      - minor
-      - type:common
+      - 'feature'
+      - 'minor'
+      - 'type:common'
   patch:
     labels:
-      - patch
-      - type:build
-      - bug
-      - bugfix
-      - hotfix
-      - fix
-      - theme:docs
-      - type:tests
-  default: patch
+      - 'patch'
+      - 'type:build'
+      - 'bug'
+      - 'bugfix'
+      - 'hotfix'
+      - 'fix'
+      - 'theme:docs'
+      - 'type:tests'
+  default: 'patch'
