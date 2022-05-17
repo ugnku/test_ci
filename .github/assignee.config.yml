@@ -1,0 +1,13 @@
+addReviewers: true
+numberOfReviewers: 1
+reviewers:
+  - ugnku
+
+addAssignees: true
+assignees:
+  - ugnku
+numberOfAssignees: 1
+
+skipKeywords:
+  - wip
+  - draft

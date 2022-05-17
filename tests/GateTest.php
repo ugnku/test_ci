@@ -12,12 +12,12 @@ class GateTest extends TestCase
     /**
      * @var string
      */
-    private $testUrl = 'http://test-url.test/test';
+    private string $testUrl = 'http://test-url.test/test';
 
     /**
      * @var Gate
      */
-    private $gate;
+    private Gate $gate;
 
     protected function setUp(): void
     {

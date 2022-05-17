@@ -19,3 +19,4 @@ type:tests:
 theme:docs:
   - "readme.md"
   - "LICENSE"
+  - "flow.png"
