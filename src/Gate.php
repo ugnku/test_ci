@@ -49,6 +49,7 @@ class Gate
 
     /**
      * Enable or disable validation payment params before generate PaymentPage URL.
+     *
      * @param bool $flag
      * @return void
      */
