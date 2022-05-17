@@ -2,11 +2,12 @@
 
 namespace tci\tests;
 
+use PHPUnit\Framework\TestCase;
 use tci\Callback;
 use tci\Gate;
 use tci\Payment;
 
-class GateTest extends \PHPUnit\Framework\TestCase
+class GateTest extends TestCase
 {
     /**
      * @var string
