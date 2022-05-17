@@ -44,11 +44,11 @@ jobs:
       fail-fast: false
       matrix:
         operating_system: ['ubuntu-latest']
-        php_versions: ['7.3', '7.4', '8.0']
+        php_versions: ['7.4', '8.0', '8.1']
         experimental: [false]
         include:
           - operating_system: ubuntu-latest
-            php_versions: '8.0'
+            php_versions: '8.1'
             experimental: true
     runs-on: '${{ matrix.operating_system }}'
     name: 'Test / PHP ${{ matrix.php_versions }}'
@@ -65,16 +65,17 @@ jobs:
           ini-values: 'pcov.directory=src, date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off'
           coverage: pcov
           tools: 'phpunit'
-      - name: 'Install PHP dependencies with Composer'
-        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
-        working-directory: './'
-      - name: 'Run Unit Tests with PHPUnit'
-        continue-on-error: false
-        uses: php-actions/phpunit@v2
+      - name: 'Install composer and dependencies'
+        uses: php-actions/composer@v6
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
         with:
           bootstrap: vendor/autoload.php
-          configuration: phpunit.xml.dist
-          args: --coverage-text --coverage-clover build/logs/clover.xml
+          configuration: phpunit.xml
+          php_extensions: xdebug
+          args: tests --coverage-clover ./coverage.xml
       - name: 'Upload coverage results to Coveralls'
         if: ${{ !matrix.experimental }}
         env:
