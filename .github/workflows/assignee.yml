@@ -1,13 +1,13 @@
 name: 'Auto assign assignees or reviewers'
 on: pull_request
 
-permission:
-  contents: read
-
 jobs:
   add-reviews:
     name: "Auto assignment of a assignee"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: kentaro-m/auto-assign-action@v1.1.2
         with:

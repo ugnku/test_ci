@@ -2,15 +2,15 @@ name: "Auto labeling for a pull request"
 on:
   - pull_request_target
 
-permission:
-  content: read
-
 jobs:
   triage:
     name: "Checking for labels"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - uses: actions/labeler@main
+      - uses: actions/labeler@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
