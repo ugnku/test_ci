@@ -1,0 +1,22 @@
+type:build:
+  - ".github/**/*"
+  - ".coveralls.yml"
+  - ".gitignore"
+  - "phpcs.xml.dist"
+
+dependencies:
+  - "composer.json"
+  - "composer.lock"
+
+type:common:
+  - "src/**/*"
+
+type:tests:
+  - 'tests/**/*'
+  - 'phpunit.xml.dist'
+  - 'tests.sh'
+
+theme:docs:
+  - "readme.md"
+  - "LICENSE"
+  - "flow.png"
