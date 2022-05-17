@@ -18,6 +18,53 @@ env:
   php_extensions: 'json'
 
 jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        operating_system: [ 'ubuntu-latest' ]
+        php_versions: [ '7.4', '8.0', '8.1' ]
+        experimental: [ false ]
+        include:
+          - operating_system: ubuntu-latest
+            php_versions: '8.1'
+            experimental: true
+    runs-on: '${{ matrix.operating_system }}'
+    name: 'Test / PHP ${{ matrix.php_versions }}'
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: 'Setup PHP'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php_versions }}
+          extensions: ${{ env.php_extensions }}
+          ini-values: 'pcov.directory=src, date.timezone=UTC, upload_max_filesize=20M, post_max_size=20M, memory_limit=512M, short_open_tag=Off'
+          coverage: pcov
+          tools: 'phpunit'
+      - name: 'Install PHP dependencies with Composer'
+        run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+        working-directory: './'
+      - name: 'Run Unit Tests with PHPUnit'
+        continue-on-error: false
+        run: |
+          ./vendor/bin/phpunit \
+            --verbose \
+            --stderr \
+            --coverage-clover build/logs/clover.xml
+        working-directory: './'
+      - name: 'Upload coverage results to Coveralls'
+        if: ${{ !matrix.experimental }}
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: php-${{ matrix.php_versions }}
+        run: |
+          ./vendor/bin/php-coveralls \
+            --coverage_clover=build/logs/clover.xml \
+            -v
   coverage:
     needs: test
     runs-on: ubuntu-latest
