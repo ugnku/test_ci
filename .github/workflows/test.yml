@@ -1,10 +1,8 @@
-name: PHP Composer
+name: Test suite
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    types: 
+    types:
       - opened
       - reopened
       - edited
@@ -14,32 +12,11 @@ permissions:
   contents: read
 
 env:
-  COVERAGE: '1'
-  php_extensions: 'json, http'
+  php_extensions: 'json'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
   test:
+    needs: build
     strategy:
       fail-fast: false
       matrix:
@@ -86,14 +63,3 @@ jobs:
           ./vendor/bin/php-coveralls \
             --coverage_clover=build/logs/clover.xml \
             -v
-  coverage:
-    needs: test
-    runs-on: ubuntu-latest
-    name: "Code coverage"
-    steps:
-      - name: 'Coveralls Finished'
-        uses: coverallsapp/github-action@v1.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
-
