@@ -5,7 +5,10 @@ jobs:
   add-reviews:
     name: "Auto assignment of a assignee"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: kentaro-m/auto-assign-action@v1.1.2
         with:
-          configuration-path: ".github/assignee.config.yml"
+          configuration-path: "./github/assignee.config.yml"
