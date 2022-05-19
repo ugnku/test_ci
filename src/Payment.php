@@ -1,6 +1,6 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
 use BadMethodCallException;
 use DateTime;
@@ -81,7 +81,7 @@ class Payment
     /**
      * @var array Payment parameters
      */
-    private array $params;
+    private $params;
 
     /**
      * Payment constructor.

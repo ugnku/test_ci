@@ -1,9 +1,9 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
-use tci\exception\ProcessException;
-use tci\exception\ValidationException;
+use ecommpay\exception\ProcessException;
+use ecommpay\exception\ValidationException;
 
 /**
  * Gate
@@ -17,23 +17,23 @@ class Gate
     /**
      * Builder for Payment page
      *
-     * @var PaymentPage $paymentPageUrlBuilder
+     * @var PaymentPage $urlBuilder
      */
-    private PaymentPage $paymentPageUrlBuilder;
+    private $urlBuilder;
 
     /**
      * Signature Handler (check, sign)
      *
      * @var SignatureHandler $signatureHandler
      */
-    private SignatureHandler $signatureHandler;
+    private $signatureHandler;
 
     /**
      * Flag validate payment params before generate PaymentPage URL.
      *
      * @var bool
      */
-    private bool $validateParams = false;
+    private $validateParams = false;
 
     /**
      * Gate constructor.
@@ -44,12 +44,11 @@ class Gate
     public function __construct(string $secret, string $baseUrl = '')
     {
         $this->signatureHandler = new SignatureHandler($secret);
-        $this->paymentPageUrlBuilder = new PaymentPage($this->signatureHandler, $baseUrl);
+        $this->urlBuilder = new PaymentPage($this->signatureHandler, $baseUrl);
     }
 
     /**
      * Enable or disable validation payment params before generate PaymentPage URL.
-     *
      * @param bool $flag
      * @return void
      */
@@ -64,7 +63,7 @@ class Gate
      */
     public function setPaymentBaseUrl(string $paymentBaseUrl = ''): self
     {
-        $this->paymentPageUrlBuilder->setBaseUrl($paymentBaseUrl);
+        $this->urlBuilder->setBaseUrl($paymentBaseUrl);
 
         return $this;
     }
@@ -83,7 +82,7 @@ class Gate
             $this->validateParams($payment);
         }
 
-        return $this->paymentPageUrlBuilder->getUrl($payment);
+        return $this->urlBuilder->getUrl($payment);
     }
 
     /**
@@ -100,7 +99,6 @@ class Gate
         return new Callback($data, $this->signatureHandler);
     }
 
-
     /**
      * @param Payment $payment
      * @return void
@@ -108,7 +106,7 @@ class Gate
      */
     private function validateParams(Payment $payment)
     {
-        $requestUri = $this->paymentPageUrlBuilder->getValidationUrl($payment);
+        $requestUri = $this->urlBuilder->getValidationUrl($payment);
         $stream = fopen($requestUri, 'r');
         $errors = [];
         $status = 0;

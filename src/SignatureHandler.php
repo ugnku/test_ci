@@ -1,6 +1,6 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
 use function in_array;
 
@@ -20,7 +20,7 @@ class SignatureHandler
      *
      * @var string
      */
-    private string $secretKey;
+    private $secretKey;
 
     /**
      * __construct
@@ -79,18 +79,20 @@ class SignatureHandler
             }
 
             $paramKey = ($prefix ? $prefix . ':' : '') . $key;
+
             if (is_array($value)) {
                 $subArray = $this->getParamsToSign($value, $ignoreParamKeys, $paramKey, false);
                 $paramsToSign = array_merge($paramsToSign, $subArray);
-            } else {
-                if (is_bool($value)) {
-                    $value = $value ? '1' : '0';
-                } else {
-                    $value = (string)$value;
-                }
-
-                $paramsToSign[$paramKey] = $paramKey . ':' . $value;
+                continue;
             }
+
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            } else {
+                $value = (string)$value;
+            }
+
+            $paramsToSign[$paramKey] = $paramKey . ':' . $value;
         }
 
         if ($sort) {

@@ -1,10 +1,10 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
-use tci\exception\ProcessException;
+use ecommpay\exception\ProcessException;
 
-use tci\exception\SdkException;
+use ecommpay\exception\SdkException;
 
 use function is_array;
 
@@ -83,14 +83,14 @@ class Callback
      *
      * @var array
      */
-    private array $data;
+    private $data;
 
     /**
      * Signature Handler
      *
      * @var SignatureHandler
      */
-    private SignatureHandler $signatureHandler;
+    private $signatureHandler;
 
     /**
      * @param string|array $data RAW or already processed data from gate
@@ -203,7 +203,7 @@ class Callback
         foreach ($keys as $key) {
             $value = $callbackData[$key] ?? null;
 
-            if (is_null($value)) {
+            if ($value === null) {
                 return null;
             }
 
