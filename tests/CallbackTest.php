@@ -60,7 +60,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
 
     public function testGetData(): void
     {
-        $data = json_decode($this->dataRaw);
+        $data = json_decode($this->dataRaw, true);
         self::assertEqualsCanonicalizing($data, $this->callback->getData());
         self::assertEqualsCanonicalizing($data, $this->callback->toArray($this->dataRaw));
     }
