@@ -1,6 +1,5 @@
-type:build:
+build:
   - ".github/**/*"
-  - ".coveralls.yml"
   - ".gitignore"
   - "phpcs.xml.dist"
 
@@ -8,15 +7,15 @@ dependencies:
   - "composer.json"
   - "composer.lock"
 
-type:common:
+enhancement:
   - "src/**/*"
 
-type:tests:
+tests:
   - 'tests/**/*'
   - 'phpunit.xml.dist'
   - 'tests.sh'
 
-theme:docs:
+documentation:
   - "readme.md"
   - "LICENSE"
   - "flow.png"
