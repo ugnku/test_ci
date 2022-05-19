@@ -1,10 +1,9 @@
 <?php
 
-namespace ecommpay;
+namespace tci;
 
-use ecommpay\exception\ProcessException;
-
-use ecommpay\exception\SdkException;
+use tci\exception\ProcessException;
+use tci\exception\SdkException;
 
 use function is_array;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ecommpay;
+namespace tci;
 
 /**
  * Payment page URL Builder
@@ -16,21 +16,21 @@ class PaymentPage
      *
      * @var string
      */
-    private $baseUrl = 'https://paymentpage.ecommpay.com';
+    private string $baseUrl = 'https://paymentpage.ecommpay.com';
 
     /**
      * Base URL for payment
      *
      * @var string
      */
-    private $apiUrl = 'https://sdk.ecommpay.com';
+    private string $apiUrl = 'https://sdk.ecommpay.com';
 
     /**
      * Signature Handler
      *
      * @var SignatureHandler $signatureHandler
      */
-    private $signatureHandler;
+    private SignatureHandler $signatureHandler;
 
     /**
      * @param SignatureHandler $signatureHandler

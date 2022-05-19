@@ -1,9 +1,9 @@
 <?php
 
-namespace ecommpay;
+namespace tci;
 
-use ecommpay\exception\ProcessException;
-use ecommpay\exception\ValidationException;
+use tci\exception\ProcessException;
+use tci\exception\ValidationException;
 
 /**
  * Gate
@@ -19,21 +19,21 @@ class Gate
      *
      * @var PaymentPage $urlBuilder
      */
-    private $urlBuilder;
+    private PaymentPage $urlBuilder;
 
     /**
      * Signature Handler (check, sign)
      *
      * @var SignatureHandler $signatureHandler
      */
-    private $signatureHandler;
+    private SignatureHandler $signatureHandler;
 
     /**
      * Flag validate payment params before generate PaymentPage URL.
      *
      * @var bool
      */
-    private $validateParams = false;
+    private bool $validateParams = false;
 
     /**
      * Gate constructor.

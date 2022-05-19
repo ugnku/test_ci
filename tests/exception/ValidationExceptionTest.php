@@ -3,10 +3,7 @@
 namespace tci\tests\exception;
 
 use PHPUnit\Framework\TestCase;
-use tci\Callback;
 use tci\exception\ValidationException;
-use tci\Gate;
-use tci\Payment;
 
 class ValidationExceptionTest extends TestCase
 {

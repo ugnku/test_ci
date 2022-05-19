@@ -1,9 +1,9 @@
 <?php
 
-namespace ecommpay\tests;
+namespace tci\tests;
 
-use ecommpay\exception\ProcessException;
-use ecommpay\Gate;
+use tci\exception\ProcessException;
+use tci\Gate;
 
 class CallbackTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace ecommpay;
+namespace tci;
 
 use function in_array;
 
@@ -20,7 +20,7 @@ class SignatureHandler
      *
      * @var string
      */
-    private $secretKey;
+    private string $secretKey;
 
     /**
      * __construct
