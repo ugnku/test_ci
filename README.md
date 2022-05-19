@@ -7,3 +7,7 @@
 ![Release Date](https://img.shields.io/github/release-date/ugnku/test_ci)
 
 # PHP CI Test project
+
+## Structure
+- /src - Source code
+- /tests - Unit tests
