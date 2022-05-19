@@ -3,7 +3,6 @@
 namespace tci;
 
 use tci\exception\ProcessException;
-
 use tci\exception\SdkException;
 
 use function is_array;
@@ -203,7 +202,7 @@ class Callback
         foreach ($keys as $key) {
             $value = $callbackData[$key] ?? null;
 
-            if (is_null($value)) {
+            if ($value === null) {
                 return null;
             }
 

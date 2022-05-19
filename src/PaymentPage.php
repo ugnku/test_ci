@@ -73,7 +73,6 @@ class PaymentPage
         );
     }
 
-
     /**
      * Return full URL for check payment parameters.
      *

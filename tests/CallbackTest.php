@@ -2,15 +2,20 @@
 
 namespace tci\tests;
 
-use PHPUnit\Framework\TestCase;
+use tci\exception\ProcessException;
 use tci\Gate;
 
-class CallbackTest extends TestCase
+class CallbackTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
+    private $dataRaw;
+
     /**
      * @var Gate
      */
-    private Gate $gate;
+    private $gate;
 
     /**
      * @var Callback
@@ -19,10 +24,11 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->dataRaw = require __DIR__ . '/data/callback.php';
         $this->gate = new Gate('secret');
         $this->callback =
             $this->gate
-                ->handleCallback(require __DIR__ . '/data/callback.php');
+                ->handleCallback($this->dataRaw);
     }
 
     public function testGetPaymentId(): void
@@ -44,5 +50,36 @@ class CallbackTest extends TestCase
     public function testGetPaymentStatus(): void
     {
         self::assertEquals('success', $this->callback->getPaymentStatus());
+    }
+
+    public function testGetCallbackException(): void
+    {
+        self::expectException(ProcessException::class);
+        $this->gate->handleCallback('}');
+    }
+
+    public function testGetData(): void
+    {
+        $data = json_decode($this->dataRaw, true);
+        self::assertEqualsCanonicalizing($data, $this->callback->getData());
+        self::assertEqualsCanonicalizing($data, $this->callback->toArray($this->dataRaw));
+    }
+
+    public function testToArrayException(): void
+    {
+        self::expectException(ProcessException::class);
+        $this->callback->toArray('}');
+    }
+
+    public function testGetSignatureException(): void
+    {
+        self::expectException(ProcessException::class);
+        $callback = $this->gate->handleCallback('{}');
+        $callback->getSignature();
+    }
+
+    public function testGetNullValue(): void
+    {
+        self::assertNull($this->callback->getValue('test.test.test'));
     }
 }
