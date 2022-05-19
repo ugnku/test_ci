@@ -11,7 +11,7 @@ categories:
   - title: 'Features'
     labels:
       - 'feature'
-      - 'type:common'
+      - 'enhancement'
   - title: 'Bug Fixes'
     labels:
       - 'fix'
@@ -21,10 +21,10 @@ categories:
       - 'dependencies'
   - title: 'Maintenance'
     labels:
-      - 'type:build'
+      - 'build'
       - 'refactoring'
-      - 'theme:docs'
-      - 'type:tests'
+      - 'documentation'
+      - 'tests'
 
 change-title-escapes: '\<*_&'
 
@@ -37,15 +37,16 @@ version-resolver:
     labels:
       - 'feature'
       - 'minor'
-      - 'type:common'
+      - 'enhancement'
+      - 'dependencies'
   patch:
     labels:
       - 'patch'
-      - 'type:build'
+      - 'build'
       - 'bug'
       - 'bugfix'
       - 'hotfix'
       - 'fix'
-      - 'theme:docs'
-      - 'type:tests'
+      - 'documentation'
+      - 'tests'
   default: 'patch'
