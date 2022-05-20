@@ -17,6 +17,6 @@ class ValidationExceptionTest extends TestCase
         $exception = new ValidationException($data);
 
         self::assertEquals(ValidationException::MESSAGE, $exception->getMessage());
-        self::assertEqualsCanonicalizing($data, $exception->getErrors());
+        self::assertEquals($data, $exception->getErrors());
     }
 }
