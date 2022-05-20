@@ -16,21 +16,21 @@ class PaymentPage
      *
      * @var string
      */
-    private string $baseUrl = 'https://paymentpage.ecommpay.com';
+    private $baseUrl = 'https://paymentpage.ecommpay.com';
 
     /**
      * Base URL for payment
      *
      * @var string
      */
-    private string $apiUrl = 'https://sdk.ecommpay.com';
+    private $apiUrl = 'https://sdk.ecommpay.com';
 
     /**
      * Signature Handler
      *
      * @var SignatureHandler $signatureHandler
      */
-    private SignatureHandler $signatureHandler;
+    private $signatureHandler;
 
     /**
      * @param SignatureHandler $signatureHandler

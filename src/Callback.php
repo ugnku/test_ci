@@ -82,14 +82,14 @@ class Callback
      *
      * @var array
      */
-    private array $data;
+    private $data;
 
     /**
      * Signature Handler
      *
      * @var SignatureHandler
      */
-    private SignatureHandler $signatureHandler;
+    private $signatureHandler;
 
     /**
      * @param string|array $data RAW or already processed data from gate

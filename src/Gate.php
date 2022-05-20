@@ -19,21 +19,21 @@ class Gate
      *
      * @var PaymentPage $urlBuilder
      */
-    private PaymentPage $urlBuilder;
+    private $urlBuilder;
 
     /**
      * Signature Handler (check, sign)
      *
      * @var SignatureHandler $signatureHandler
      */
-    private SignatureHandler $signatureHandler;
+    private $signatureHandler;
 
     /**
      * Flag validate payment params before generate PaymentPage URL.
      *
      * @var bool
      */
-    private bool $validateParams = false;
+    private $validateParams = false;
 
     /**
      * Gate constructor.

@@ -7,7 +7,7 @@ use tci\Payment;
 
 class PaymentTest extends TestCase
 {
-    public function testGetParams(): void
+    public function testGetParams()
     {
         $payment = (new Payment(100))->setPaymentId('test payment id');
         $expected = [
@@ -18,7 +18,7 @@ class PaymentTest extends TestCase
         self::assertEquals($expected, $payment->getParams());
     }
 
-    public function testSetBestBefore(): void
+    public function testSetBestBefore()
     {
         $payment = new Payment(100);
 
@@ -28,7 +28,7 @@ class PaymentTest extends TestCase
         self::assertEquals('Sat, 01 Jan 2000 00:00:00 +0000', $payment->getParams()['best_before']);
     }
 
-    public function testMagicMethods(): void
+    public function testMagicMethods()
     {
         $payment = new Payment(100, 'test payment id');
         $payment->setAccountToken('token')->setCardOperationType('type');

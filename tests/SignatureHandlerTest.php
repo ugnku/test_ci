@@ -10,7 +10,7 @@ class SignatureHandlerTest extends TestCase
     /**
      * @var array
      */
-    private array $data = [
+    private $data = [
         'customer' => [
             'project_id' => 0,
             'id' => 'sutm_id',
@@ -29,19 +29,19 @@ class SignatureHandlerTest extends TestCase
     /**
      * @var string
      */
-    private string $signature = 'lY0LTSAzpR7zGce5qfYGacOuYlHGWqkMcQlqmjlsDDZI2gVcE1qVeWANnkIR7mdOqRXJnL1kO0lUmkQ0YYLWRg==';
+    private $signature = 'lY0LTSAzpR7zGce5qfYGacOuYlHGWqkMcQlqmjlsDDZI2gVcE1qVeWANnkIR7mdOqRXJnL1kO0lUmkQ0YYLWRg==';
 
     /**
      * @var SignatureHandler
      */
-    private SignatureHandler $handler;
+    private $handler;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->handler = new SignatureHandler('secret');
     }
 
-    public function testSign(): void
+    public function testSign()
     {
         self::assertEquals(
             $this->signature,
@@ -49,7 +49,7 @@ class SignatureHandlerTest extends TestCase
         );
     }
 
-    public function testCheck(): void
+    public function testCheck()
     {
         self::assertTrue($this->handler->check($this->data, $this->signature));
     }

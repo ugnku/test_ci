@@ -13,12 +13,12 @@ class CallbackFormatTest extends TestCase
      */
     private $cases;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->cases = require __DIR__ . '/data/callbackFormats.php';
     }
 
-    public function testFormats(): void
+    public function testFormats()
     {
         foreach ($this->cases as $callbackData) {
             $callback = (new Callback($callbackData, new SignatureHandler('123')));

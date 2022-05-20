@@ -22,7 +22,7 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     private $callback;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->dataRaw = require __DIR__ . '/data/callback.php';
         $this->gate = new Gate('secret');
@@ -31,54 +31,54 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
                 ->handleCallback($this->dataRaw);
     }
 
-    public function testGetPaymentId(): void
+    public function testGetPaymentId()
     {
         self::assertEquals('000049', $this->callback->getPaymentId());
     }
 
-    public function testGetPayment(): void
+    public function testGetPayment()
     {
         self::assertArrayHasKey('id', $this->callback->getPayment());
         self::assertArrayHasKey('status', $this->callback->getPayment());
     }
 
-    public function testGetSignature(): void
+    public function testGetSignature()
     {
         self::assertNotEmpty($this->callback->getSignature());
     }
 
-    public function testGetPaymentStatus(): void
+    public function testGetPaymentStatus()
     {
         self::assertEquals('success', $this->callback->getPaymentStatus());
     }
 
-    public function testGetCallbackException(): void
+    public function testGetCallbackException()
     {
         self::expectException(ProcessException::class);
-        $this->gate->handleCallback('}');
+        $this->gate->handleCallback('qwerty');
     }
 
-    public function testGetData(): void
+    public function testGetData()
     {
         $data = json_decode($this->dataRaw, true);
         self::assertEqualsCanonicalizing($data, $this->callback->getData());
         self::assertEqualsCanonicalizing($data, $this->callback->toArray($this->dataRaw));
     }
 
-    public function testToArrayException(): void
+    public function testToArrayException()
     {
         self::expectException(ProcessException::class);
-        $this->callback->toArray('}');
+        $this->callback->toArray('qwerty');
     }
 
-    public function testGetSignatureException(): void
+    public function testGetSignatureException()
     {
         self::expectException(ProcessException::class);
         $callback = $this->gate->handleCallback('{}');
         $callback->getSignature();
     }
 
-    public function testGetNullValue(): void
+    public function testGetNullValue()
     {
         self::assertNull($this->callback->getValue('test.test.test'));
     }

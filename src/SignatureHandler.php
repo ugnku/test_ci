@@ -20,7 +20,7 @@ class SignatureHandler
      *
      * @var string
      */
-    private string $secretKey;
+    private $secretKey;
 
     /**
      * __construct
@@ -80,19 +80,19 @@ class SignatureHandler
 
             $paramKey = ($prefix ? $prefix . ':' : '') . $key;
 
-            if (is_array($value)) {
-                $subArray = $this->getParamsToSign($value, $ignoreParamKeys, $paramKey, false);
-                $paramsToSign = array_merge($paramsToSign, $subArray);
-                continue;
-            }
+            switch (true) {
+                case is_array($value):
+                    $subArray = $this->getParamsToSign($value, $ignoreParamKeys, $paramKey, false);
+                    $paramsToSign = array_merge($paramsToSign, $subArray);
+                    break;
 
-            if (is_bool($value)) {
-                $value = $value ? '1' : '0';
-            } else {
-                $value = (string)$value;
-            }
+                case is_bool($value):
+                    $paramsToSign[$paramKey] = $paramKey . ':' . ($value ? '1' : '0');
+                    break;
 
-            $paramsToSign[$paramKey] = $paramKey . ':' . $value;
+                default:
+                    $paramsToSign[$paramKey] = $paramKey . ':' . $value;
+            }
         }
 
         if ($sort) {

@@ -81,7 +81,7 @@ class Payment
     /**
      * @var array Payment parameters
      */
-    private array $params;
+    private $params;
 
     /**
      * Payment constructor.

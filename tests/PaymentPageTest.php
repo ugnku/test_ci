@@ -9,7 +9,7 @@ use tci\Payment;
 
 class PaymentPageTest extends TestCase
 {
-    public function testSetBaseUrl(): void
+    public function testSetBaseUrl()
     {
         $baseUrl = 'https://www.example.com';
         $handler = new SignatureHandler('secret');
@@ -33,7 +33,7 @@ class PaymentPageTest extends TestCase
 
     }
 
-    public function testGetUrl(): void
+    public function testGetUrl()
     {
         $handler = new SignatureHandler('secret');
         $paymentPage = new PaymentPage($handler);
@@ -53,7 +53,7 @@ class PaymentPageTest extends TestCase
         );
     }
 
-    public function testGetValidationUrl(): void
+    public function testGetValidationUrl()
     {
         $handler = new SignatureHandler('secret');
         $paymentPage = new PaymentPage($handler);

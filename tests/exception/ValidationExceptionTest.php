@@ -7,7 +7,7 @@ use tci\exception\ValidationException;
 
 class ValidationExceptionTest extends TestCase
 {
-    public function testGetErrors(): void
+    public function testGetErrors()
     {
         $data = [
             'payment.id' => 'Payment identifier required.',
