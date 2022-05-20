@@ -15,7 +15,7 @@ class ValidationException extends Exception implements SdkException
     /**
      * @var array
      */
-    private array $errors;
+    private $errors;
 
     /**
      * Validation exception constructor.
