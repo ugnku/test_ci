@@ -1,10 +1,11 @@
 <?php
 
-namespace tci\tests;
+namespace ecommpay\tests;
 
+use ecommpay\Callback;
+use ecommpay\exception\ProcessException;
+use ecommpay\SignatureHandler;
 use PHPUnit\Framework\TestCase;
-use tci\Callback;
-use tci\SignatureHandler;
 
 class CallbackFormatTest extends TestCase
 {
@@ -21,7 +22,11 @@ class CallbackFormatTest extends TestCase
     public function testFormats()
     {
         foreach ($this->cases as $callbackData) {
-            $callback = (new Callback($callbackData, new SignatureHandler('123')));
+            try {
+                $callback = new Callback($callbackData, new SignatureHandler('123'));
+            } catch (ProcessException $e) {
+                self::fail($e->getMessage());
+            }
 
             $callback->getPayment();
             $callback->getPaymentId();

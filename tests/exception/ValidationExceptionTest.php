@@ -1,12 +1,13 @@
 <?php
 
-namespace tci\tests\exception;
+namespace ecommpay\tests\exception;
 
 use PHPUnit\Framework\TestCase;
-use tci\exception\ValidationException;
+use ecommpay\exception\ValidationException;
 
 class ValidationExceptionTest extends TestCase
 {
+
     public function testGetErrors()
     {
         $data = [
