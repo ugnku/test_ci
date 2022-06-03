@@ -1,9 +1,10 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
 use BadMethodCallException;
 use DateTime;
+use ecommpay\interfaces\PaymentInterface;
 
 /**
  * Class Payment
@@ -11,7 +12,7 @@ use DateTime;
  * @link https://developers.ecommpay.com/en/en_PP_Parameters.html
  *
  * phpcs:disable
- * @method $this setAccountToken(string $token):self The token of the bank card that will be used to perform a payment
+ * @method $this setAccountToken(string $token) The token of the bank card that will be used to perform a payment
  * @method $this setCardOperationType(string $type) Type of payment performed via payment card
  * @method $this setCloseOnMissclick(bool $bool) A parameter that specifies the action of the widget (opened in the modal window) when a customer clicks outside the widget area.
  * @method $this setCssModalWrap(string $wrap) An additional CSS class for a modal window.
@@ -31,12 +32,12 @@ use DateTime;
  * @method $this setRecurring(array $data) Parameter that indicates whether this payment should be registered as recurring
  * @method $this setCustomerFirstName(string $name) Customer first name
  * @method $this setCustomerLastName(string $name) Customer last name
- * @method $this setCustomerPhone(string $phone) Customer phone number. Must have from 4 to 24 digits
+ * @method $this setCustomerPhone(string $phone) Customer phone number. Must-have from 4 to 24 digits
  * @method $this setCustomerEmail(string $email) Customer e-mail
  * @method $this setCustomerCountry(string $country) Country of the customer address, in ISO 3166-1 alpha-2 format
  * @method $this setCustomerState(string $state) State or region of the customer address
  * @method $this setCustomerCity(string $city) City of the customer address
- * @method $this setCustomerDayOfBirth(string $date) Customer birth date, DD-MM-YYYY
+ * @method $this setCustomerDayOfBirth(string $date) Customer birthdate, DD-MM-YYYY
  * @method $this setCustomerSsn(int $ssn) The last 4 digits of the social security number of US
  * @method $this setBillingPostal(string $postal) The postal code of the customer billing address
  * @method $this setBillingCountry(string $country) The country of the customer billing address, in ISO 3166-1 alpha-2 format
@@ -51,7 +52,7 @@ use DateTime;
  * @method $this setRedirectSuccessUrl(string $url) The URL of the page in your project to which the customer is redirected after a successful payment
  * @method $this setRedirectTokenizeMode(string $mode) The mode for customer redirection once a token is generated.
  * @method $this setRedirectTokenizeUrl(string $url) The URL of the page in your project to which the customer is redirected after a successful token generation.
- * @method $this setRegionCode(string $code) The region in ISO 3166-1 alpha-2 format. By default the region is determined by the IP address of the customer
+ * @method $this setRegionCode(string $code) The region in ISO 3166-1 alpha-2 format. By default, the region is determined by the IP address of the customer
  * @method $this setTargetElement(string $target) The element in which the iframe of the payment page is embedded in the web page of your project.
  * @method $this setTerminalId(int $id) Unique ID of the Payment Page template which you want to run despite the regional and A/B test settings
  * @method $this setBaseurl(string $url) Basic Payment Page address that is used in case the Payment Page domain differs from the domain used to connect libraries or if merchant.js is not connected via the <script> tag
@@ -59,25 +60,8 @@ use DateTime;
  * @method $this setFrameMode(string $mode) Widget launch mode
  * phpcs:enable
  */
-class Payment
+class Payment implements PaymentInterface
 {
-    /**
-     * Payment from customer account
-     */
-    const PURCHASE_TYPE = 'purchase';
-
-    /**
-     * Payment to customer account
-     */
-    const PAYOUT_TYPE = 'payout';
-
-    /**
-     * Recurring payment
-     */
-    const RECURRING_TYPE = 'recurring';
-
-    const INTERFACE_TYPE = 23;
-
     /**
      * @var array Payment parameters
      */
@@ -89,7 +73,7 @@ class Payment
      * @param string $projectId
      * @param string|null $paymentId
      */
-    public function __construct(string $projectId, string $paymentId = null)
+    public function __construct($projectId, $paymentId = null)
     {
         $this->params = [
             'project_id' => $projectId,
@@ -102,23 +86,17 @@ class Payment
     }
 
     /**
-     * Get payment parameters
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getParams(): array
+    public function getParams()
     {
         return $this->params;
     }
 
     /**
-     * Date and time when the payment period expires.
-     *
-     * @param DateTime $time
-     *
-     * @return Payment
+     * @inheritDoc
      */
-    public function setBestBefore(DateTime $time): Payment
+    public function setBestBefore(DateTime $time)
     {
         $this->params['best_before'] = $time->format('r');
         return $this;
@@ -133,12 +111,14 @@ class Payment
      *
      * @param $name
      * @param $arguments
-     * @return $this
+     * @return self
      */
     public function __call($name, $arguments)
     {
         if (strpos($name, 'set') === 0) {
-            $key = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', lcfirst(substr($name, 3))));
+            $key = strtolower(
+                preg_replace('/([a-z])([A-Z])/', '$1_$2', lcfirst(substr($name, 3)))
+            );
             $this->params[$key] = $arguments[0];
 
             return $this;

@@ -1,19 +1,17 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
-use function in_array;
+use ecommpay\interfaces\SignatureHandlerInterface;
 
 /**
  * SignatureHandler
  *
  * @see https://developers.ecommpay.com/en/en_PP_Authentication.html
  */
-class SignatureHandler
+class SignatureHandler implements SignatureHandlerInterface
 {
-    const ITEMS_DELIMITER = ';';
-    const ALGORITHM = 'sha512';
-    const IGNORED_KEYS = ['frame_mode'];
+    private $ignoreKeys = array(self::FIELD_FRAME_MODE);
 
     /**
      * Secret key
@@ -27,32 +25,29 @@ class SignatureHandler
      *
      * @param string $secretKey
      */
-    public function __construct(string $secretKey)
+    public function __construct($secretKey)
     {
         $this->secretKey = $secretKey;
     }
 
     /**
-     * Check signature
-     *
-     * @param array $params
-     * @param string $signature
-     * @return boolean
+     * @inheritDoc
      */
-    public function check(array $params, string $signature): bool
+    public function check(array $params, $signature)
     {
         return $this->sign($params) === $signature;
     }
 
     /**
-     * Return signature
-     *
-     * @param array $params
-     * @return string
+     * @inheritDoc
      */
-    public function sign(array $params): string
+    public function sign(array $params)
     {
-        $stringToSign = implode(self::ITEMS_DELIMITER, $this->getParamsToSign($params, self::IGNORED_KEYS));
+        $stringToSign = implode(
+            self::ITEMS_DELIMITER,
+            $this->getParamsToSign($params, $this->ignoreKeys)
+        );
+
         return base64_encode(hash_hmac(self::ALGORITHM, $stringToSign, $this->secretKey, true));
     }
 
@@ -65,12 +60,8 @@ class SignatureHandler
      * @param bool $sort
      * @return array
      */
-    private function getParamsToSign(
-        array $params,
-        array $ignoreParamKeys = [],
-        string $prefix = '',
-        bool $sort = true
-    ): array {
+    private function getParamsToSign(array $params, array $ignoreParamKeys = [], $prefix = '', $sort = true)
+    {
         $paramsToSign = [];
 
         foreach ($params as $key => $value) {
@@ -80,19 +71,19 @@ class SignatureHandler
 
             $paramKey = ($prefix ? $prefix . ':' : '') . $key;
 
-            switch (true) {
-                case is_array($value):
-                    $subArray = $this->getParamsToSign($value, $ignoreParamKeys, $paramKey, false);
-                    $paramsToSign = array_merge($paramsToSign, $subArray);
-                    break;
-
-                case is_bool($value):
-                    $paramsToSign[$paramKey] = $paramKey . ':' . ($value ? '1' : '0');
-                    break;
-
-                default:
-                    $paramsToSign[$paramKey] = $paramKey . ':' . $value;
+            if (is_array($value)) {
+                $subArray = $this->getParamsToSign($value, $ignoreParamKeys, $paramKey, false);
+                $paramsToSign = array_merge($paramsToSign, $subArray);
+                continue;
             }
+
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            } else {
+                $value = (string)$value;
+            }
+
+            $paramsToSign[$paramKey] = $paramKey . ':' . $value;
         }
 
         if ($sort) {

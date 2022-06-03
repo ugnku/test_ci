@@ -10,13 +10,13 @@
         }
     ],
     "autoload": {
-        "psr-4": { "tci\\": "src/" }
+        "psr-4": { "ecommpay\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "tci\\tests\\": "tests/" }
+        "psr-4": { "ecommpay\\tests\\": "tests/" }
     },
     "require": {
-        "php": "^5.6",
+        "php": "^5.4",
         "ext-json": "*"
     },
     "require-dev": {

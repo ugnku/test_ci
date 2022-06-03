@@ -1,11 +1,12 @@
 <?php
 
-namespace tci\tests;
+namespace ecommpay\tests;
 
+use ecommpay\exception\ProcessException;
+use ecommpay\exception\ValidationException;
+use ecommpay\Gate;
+use ecommpay\Payment;
 use PHPUnit\Framework\TestCase;
-use tci\Callback;
-use tci\Gate;
-use tci\Payment;
 
 class GateTest extends TestCase
 {
@@ -27,7 +28,12 @@ class GateTest extends TestCase
     public function testGetPurchasePaymentPageUrl()
     {
         $payment = (new Payment(100))->setPaymentId('test payment id');
-        $paymentUrl = $this->gate->getPurchasePaymentPageUrl($payment);
+
+        try {
+            $paymentUrl = $this->gate->getPurchasePaymentPageUrl($payment);
+        } catch (ValidationException $e) {
+            self::fail($e->getMessage());
+        }
 
         self::assertNotEmpty($paymentUrl);
         self::assertStringStartsWith($this->testUrl, $paymentUrl);
@@ -37,17 +43,25 @@ class GateTest extends TestCase
     {
         $someTestUrl = 'http://some-test-url.test/test';
 
-        self::assertEquals(Gate::class, get_class($this->gate->setPaymentBaseUrl($someTestUrl)));
+        self::assertEquals('ecommpay\exception\Gate', get_class($this->gate->setPaymentBaseUrl($someTestUrl)));
 
-        $paymentUrl = $this->gate->getPurchasePaymentPageUrl(new Payment(100));
+        try {
+            $paymentUrl = $this->gate->getPurchasePaymentPageUrl(new Payment(100));
+        } catch (ValidationException $e) {
+            self::fail($e->getMessage());
+        }
 
         self::assertStringStartsWith($someTestUrl, $paymentUrl);
     }
 
     public function testHandleCallback()
     {
-        $callback = $this->gate->handleCallback(require __DIR__ . '/data/callback.php');
+        try {
+            $callback = $this->gate->handleCallback(require __DIR__ . '/data/callback.php');
+        } catch (ProcessException $e) {
+            self::fail($e->getMessage());
+        }
 
-        self::assertInstanceOf(Callback::class, $callback);
+        self::assertInstanceOf('ecommpay\exception\Callback', $callback);
     }
 }

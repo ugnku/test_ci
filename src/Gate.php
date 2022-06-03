@@ -1,30 +1,30 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
-use tci\exception\ProcessException;
-use tci\exception\ValidationException;
+use ecommpay\exception\ProcessException;
+use ecommpay\exception\ValidationException;
+use ecommpay\interfaces\GateInterface;
+use ecommpay\interfaces\PaymentInterface;
+use ecommpay\interfaces\PaymentPageInterface;
+use ecommpay\interfaces\SignatureHandlerInterface;
 
 /**
  * Gate
  */
-class Gate
+class Gate implements GateInterface
 {
-    const CURRENCY_RUB = 'RUB';
-    const CURRENCY_USD = 'USD';
-    const CURRENCY_EUR = 'EUR';
-
     /**
      * Builder for Payment page
      *
-     * @var PaymentPage $urlBuilder
+     * @var PaymentPageInterface $urlBuilder
      */
     private $urlBuilder;
 
     /**
      * Signature Handler (check, sign)
      *
-     * @var SignatureHandler $signatureHandler
+     * @var SignatureHandlerInterface $signatureHandler
      */
     private $signatureHandler;
 
@@ -41,7 +41,7 @@ class Gate
      * @param string $secret Secret key
      * @param string $baseUrl Base URL for concatenate with payment params
      */
-    public function __construct(string $secret, string $baseUrl = '')
+    public function __construct($secret, $baseUrl = '')
     {
         $this->signatureHandler = new SignatureHandler($secret);
         $this->urlBuilder = new PaymentPage($this->signatureHandler, $baseUrl);
@@ -52,16 +52,15 @@ class Gate
      * @param bool $flag
      * @return void
      */
-    public function setValidationParams(bool $flag)
+    public function setValidationParams($flag)
     {
         $this->validateParams = $flag;
     }
 
     /**
-     * @param string $paymentBaseUrl
-     * @return Gate
+     * @inheritDoc
      */
-    public function setPaymentBaseUrl(string $paymentBaseUrl = ''): self
+    public function setPaymentBaseUrl($paymentBaseUrl = '')
     {
         $this->urlBuilder->setBaseUrl($paymentBaseUrl);
 
@@ -69,14 +68,11 @@ class Gate
     }
 
     /**
-     * Get URL for purchase payment page
+     * @inheritDoc
      *
-     * @param Payment $payment Payment object
-     *
-     * @return string
      * @throws ValidationException
      */
-    public function getPurchasePaymentPageUrl(Payment $payment): string
+    public function getPurchasePaymentPageUrl(PaymentInterface $payment)
     {
         if ($this->validateParams) {
             $this->validateParams($payment);
@@ -86,15 +82,11 @@ class Gate
     }
 
     /**
-     * Callback handler
-     *
-     * @param string $data RAW string data from Gate
-     *
-     * @return Callback
+     * @inheritDoc
      *
      * @throws ProcessException
      */
-    public function handleCallback(string $data): Callback
+    public function handleCallback($data)
     {
         return new Callback($data, $this->signatureHandler);
     }

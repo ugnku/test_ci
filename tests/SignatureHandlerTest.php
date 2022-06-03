@@ -1,9 +1,9 @@
 <?php
 
-namespace tci\tests;
+namespace ecommpay\tests;
 
+use ecommpay\SignatureHandler;
 use PHPUnit\Framework\TestCase;
-use tci\SignatureHandler;
 
 class SignatureHandlerTest extends TestCase
 {

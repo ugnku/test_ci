@@ -1,11 +1,14 @@
 <?php
 
-namespace tci\tests;
+namespace ecommpay\tests;
 
-use tci\exception\ProcessException;
-use tci\Gate;
+use ecommpay\Callback;
+use ecommpay\exception\ProcessException;
+use ecommpay\Gate;
+use ecommpay\SignatureHandler;
+use PHPUnit\Framework\TestCase;
 
-class CallbackTest extends \PHPUnit\Framework\TestCase
+class CallbackTest extends TestCase
 {
     /**
      * @var string
@@ -22,6 +25,9 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
      */
     private $callback;
 
+    /**
+     * @throws ProcessException
+     */
     protected function setUp()
     {
         $this->dataRaw = require __DIR__ . '/data/callback.php';
@@ -44,7 +50,13 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSignature()
     {
-        self::assertNotEmpty($this->callback->getSignature());
+        try {
+            $signature = $this->callback->getSignature();
+        } catch (ProcessException $e) {
+            self::fail($e->getMessage());
+        }
+
+        self::assertNotEmpty($signature);
     }
 
     public function testGetPaymentStatus()
@@ -54,26 +66,33 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCallbackException()
     {
-        self::expectException(ProcessException::class);
-        $this->gate->handleCallback('qwerty');
+        self::expectException('ecommpay\exception\ProcessException');
+        new Callback('}', new SignatureHandler('secret'));
     }
 
     public function testGetData()
     {
-        $data = json_decode($this->dataRaw, true);
+        $data = json_decode($this->dataRaw);
         self::assertEquals($data, $this->callback->getData());
-        self::assertEquals($data, $this->callback->toArray($this->dataRaw));
+
+        try {
+            $fromRaw = $this->callback->toArray($this->dataRaw);
+        } catch (ProcessException $e) {
+            self::fail($e->getMessage());
+        }
+
+        self::assertEquals($data, $fromRaw);
     }
 
     public function testToArrayException()
     {
-        self::expectException(ProcessException::class);
-        $this->callback->toArray('qwerty');
+        self::expectException('ecommpay\exception\ProcessException');
+        $this->callback->toArray('}');
     }
 
     public function testGetSignatureException()
     {
-        self::expectException(ProcessException::class);
+        self::expectException('ecommpay\exception\ProcessException');
         $callback = $this->gate->handleCallback('{}');
         $callback->getSignature();
     }

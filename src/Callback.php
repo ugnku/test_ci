@@ -1,82 +1,17 @@
 <?php
 
-namespace tci;
+namespace ecommpay;
 
-use tci\exception\ProcessException;
-use tci\exception\SdkException;
-
-use function is_array;
+use ecommpay\exception\ProcessException;
+use ecommpay\interfaces\CallbackInterface;
+use ecommpay\interfaces\SdkException;
+use ecommpay\interfaces\SignatureHandlerInterface;
 
 /**
  * Callback
  */
-class Callback
+class Callback implements CallbackInterface
 {
-    /**
-     * Successful payment
-     */
-    const SUCCESS_STATUS = 'success';
-
-    /**
-     * Rejected payment
-     */
-    const DECLINE_STATUS = 'decline';
-
-    /**
-     * Awaiting a request with the result of a 3-D Secure Verification
-     */
-    const AW_3DS_STATUS = 'awaiting 3ds result';
-
-    /**
-     * Awaiting customer return after redirecting the customer to an external provider system
-     */
-    const AW_RED_STATUS = 'awaiting redirect result';
-
-    /**
-     * Awaiting customer actions, if the customer may perform additional attempts to make a payment
-     */
-    const AW_CUS_STATUS = 'awaiting customer';
-
-    /**
-     * Awaiting additional parameters
-     */
-    const AW_CLA_STATUS = 'awaiting clarification';
-
-    /**
-     * Awaiting request for withdrawal of funds (capture) or cancellation of payment (cancel) from your project
-     */
-    const AW_CAP_STATUS = 'awaiting capture';
-
-    /**
-     * Holding of funds (produced on authorization request) is cancelled
-     */
-    const CANCELLED_STATUS = 'cancelled';
-
-    /**
-     * Successfully completed the full refund after a successful payment
-     */
-    const REFUNDED_STATUS = 'refunded';
-
-    /**
-     * Completed partial refund after a successful payment
-     */
-    const PART_REFUNDED_STATUS = 'partially refunded';
-
-    /**
-     * Payment processing at Gate
-     */
-    const PROCESSING_STATUS = 'processing';
-
-    /**
-     * An error occurred while reviewing data for payment processing
-     */
-    const ERROR_STATUS = 'error';
-
-    /**
-     * Refund after a successful payment before closing of the business day
-     */
-    const REVERSED_STATUS = 'reversed';
-
     /**
      * Callback data as array
      *
@@ -87,16 +22,16 @@ class Callback
     /**
      * Signature Handler
      *
-     * @var SignatureHandler
+     * @var SignatureHandlerInterface
      */
     private $signatureHandler;
 
     /**
      * @param string|array $data RAW or already processed data from gate
-     * @param SignatureHandler $signatureHandler
+     * @param SignatureHandlerInterface $signatureHandler
      * @throws ProcessException
      */
-    public function __construct($data, SignatureHandler $signatureHandler)
+    public function __construct($data, SignatureHandlerInterface $signatureHandler)
     {
         $this->data = is_array($data) ? $data : $this->toArray($data);
         $this->signatureHandler = $signatureHandler;
@@ -110,19 +45,15 @@ class Callback
     }
 
     /**
-     * Returns already parsed gate data
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getData(): array
+    public function getData()
     {
         return $this->data;
     }
 
     /**
-     * Get payment info
-     *
-     * @return ?array
+     * @inheritDoc
      */
     public function getPayment()
     {
@@ -130,9 +61,7 @@ class Callback
     }
 
     /**
-     * Get payment status
-     *
-     * @return ?string
+     * @inheritDoc
      */
     public function getPaymentStatus()
     {
@@ -140,9 +69,7 @@ class Callback
     }
 
     /**
-     * Get payment ID
-     *
-     * @return ?string
+     * @inheritDoc
      */
     public function getPaymentId()
     {
@@ -150,15 +77,15 @@ class Callback
     }
 
     /**
-     * Get signature
+     * @inheritDoc
      *
-     * @return string
      * @throws ProcessException
      */
-    public function getSignature(): string
+    public function getSignature()
     {
         $signature = $this->getValue('signature')
-            ?? $this->getValue('general.signature');
+            ? $this->getValue('signature')
+            : $this->getValue('general.signature');
 
         if (!$signature) {
             throw new ProcessException('Undefined signature', SdkException::UNDEFINED_SIGNATURE);
@@ -168,15 +95,11 @@ class Callback
     }
 
     /**
-     * Cast raw data to array
-     *
-     * @param string $rawData
-     *
-     * @return array
+     * @inheritDoc
      *
      * @throws ProcessException
      */
-    public function toArray(string $rawData): array
+    public function toArray($rawData)
     {
         $data = json_decode($rawData, true);
 
@@ -188,19 +111,15 @@ class Callback
     }
 
     /**
-     * Get value by name path
-     *
-     * @param string $namePath
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function getValue(string $namePath)
+    public function getValue($namePath)
     {
         $keys = explode('.', $namePath);
         $callbackData = $this->data;
 
         foreach ($keys as $key) {
-            $value = $callbackData[$key] ?? null;
+            $value = isset($callbackData[$key]) ? $callbackData[$key] : null;
 
             if ($value === null) {
                 return null;
@@ -213,12 +132,11 @@ class Callback
     }
 
     /**
-     * checkSignature
+     * @inheritDoc
      *
-     * @return boolean
      * @throws ProcessException
      */
-    public function checkSignature(): bool
+    public function checkSignature()
     {
         $data = $this->data;
         $signature = $this->getSignature();
@@ -227,12 +145,12 @@ class Callback
     }
 
     /**
-     * Unset param at callback adata
+     * Unset param at callback data
      *
      * @param string $name param name
      * @param array $data tmp data
      */
-    private function removeParam(string $name, array &$data)
+    private function removeParam($name, array &$data)
     {
         if (isset($data[$name])) {
             unset($data[$name]);
@@ -249,7 +167,7 @@ class Callback
      * Reads input data from gate
      * @return string
      */
-    public static function readData(): string
+    public static function readData()
     {
         return file_get_contents('php://input') ?: '{}';
     }
