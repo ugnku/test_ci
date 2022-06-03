@@ -1,13 +1,11 @@
 <?php
 
-namespace tci\exception;
-
-use Throwable;
+namespace ecommpay\interfaces;
 
 /**
  * Interface for all SDK exception.
  */
-interface SdkException extends Throwable
+interface SdkException
 {
     const
         INVALID_SIGNATURE = 0xa0000001,
