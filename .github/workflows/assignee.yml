@@ -1,5 +1,9 @@
 name: 'Auto assign assignees or reviewers'
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - "5.6"
+
 
 jobs:
   add-reviews:
