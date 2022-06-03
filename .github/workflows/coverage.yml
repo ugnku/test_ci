@@ -18,8 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         operating_system: [ 'ubuntu-latest' , 'windows-latest']
-        php_versions: [ '5.3', '5.4', '5.5', '5.6']
-        experimental: [ false ]
+        php_versions: [ '5.6']
+        coverage: [ true ]
     runs-on: '${{ matrix.operating_system }}'
     name: 'Test / PHP ${{ matrix.php_versions }}'
     steps:
@@ -47,7 +47,7 @@ jobs:
             --coverage-clover build/logs/clover.xml
         working-directory: './'
       - name: 'Upload coverage results to Coveralls'
-        if: ${{ !matrix.experimental }}
+        if: ${{ !matrix.coverage }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true

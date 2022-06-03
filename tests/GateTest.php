@@ -2,6 +2,7 @@
 
 namespace ecommpay\tests;
 
+use ecommpay\Callback;
 use ecommpay\exception\ProcessException;
 use ecommpay\exception\ValidationException;
 use ecommpay\Gate;
@@ -43,7 +44,7 @@ class GateTest extends TestCase
     {
         $someTestUrl = 'http://some-test-url.test/test';
 
-        self::assertEquals('ecommpay\exception\Gate', get_class($this->gate->setPaymentBaseUrl($someTestUrl)));
+        self::assertEquals(Gate::class, get_class($this->gate->setPaymentBaseUrl($someTestUrl)));
 
         try {
             $paymentUrl = $this->gate->getPurchasePaymentPageUrl(new Payment(100));
@@ -62,6 +63,6 @@ class GateTest extends TestCase
             self::fail($e->getMessage());
         }
 
-        self::assertInstanceOf('ecommpay\exception\Callback', $callback);
+        self::assertInstanceOf(Callback::class, $callback);
     }
 }

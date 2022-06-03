@@ -66,13 +66,13 @@ class CallbackTest extends TestCase
 
     public function testGetCallbackException()
     {
-        self::expectException('ecommpay\exception\ProcessException');
+        self::expectException(ProcessException::class);
         new Callback('}', new SignatureHandler('secret'));
     }
 
     public function testGetData()
     {
-        $data = json_decode($this->dataRaw);
+        $data = json_decode($this->dataRaw, true);
         self::assertEquals($data, $this->callback->getData());
 
         try {
@@ -86,13 +86,13 @@ class CallbackTest extends TestCase
 
     public function testToArrayException()
     {
-        self::expectException('ecommpay\exception\ProcessException');
+        self::expectException(ProcessException::class);
         $this->callback->toArray('}');
     }
 
     public function testGetSignatureException()
     {
-        self::expectException('ecommpay\exception\ProcessException');
+        self::expectException(ProcessException::class);
         $callback = $this->gate->handleCallback('{}');
         $callback->getSignature();
     }
