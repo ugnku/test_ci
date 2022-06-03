@@ -17,8 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating_system: [ 'ubuntu-latest' , 'windows-latest']
-        php_versions: [ '5.6']
+        operating_system: [ 'ubuntu-latest' ]
+        php_versions: [ '5.6' ]
     runs-on: '${{ matrix.operating_system }}'
     name: 'Test / PHP ${{ matrix.php_versions }}'
     steps:
