@@ -3,7 +3,7 @@
 namespace tci\exception;
 
 use Exception;
-use Throwable;
+use tci\interfaces\SdkException;
 
 /**
  * Process exception in library
@@ -21,12 +21,17 @@ class ValidationException extends Exception implements SdkException
      * Validation exception constructor.
      *
      * @param array $errors
-     * @param ?Throwable $previous
+     * @param ?Exception $previous
      */
-    public function __construct(array $errors, Throwable $previous = null)
+    public function __construct(array $errors, Exception $previous = null)
     {
         $this->errors = $errors;
-        parent::__construct(self::MESSAGE, self::VALIDATION_ERROR, $previous);
+        parent::__construct($this->getFormattedMessage(), self::VALIDATION_ERROR, $previous);
+    }
+
+    public function getFormattedMessage()
+    {
+        return self::MESSAGE;
     }
 
     /**
@@ -34,7 +39,7 @@ class ValidationException extends Exception implements SdkException
      *
      * @return array
      */
-    final public function getErrors(): array
+    final public function getErrors()
     {
         return $this->errors;
     }

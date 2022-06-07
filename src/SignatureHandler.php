@@ -2,6 +2,8 @@
 
 namespace tci;
 
+use tci\exception\argument\InvalidStringException;
+use tci\interfaces\SignatureHandlerInterface;
 use function in_array;
 
 /**
@@ -9,12 +11,8 @@ use function in_array;
  *
  * @see https://developers.ecommpay.com/en/en_PP_Authentication.html
  */
-class SignatureHandler
+class SignatureHandler implements SignatureHandlerInterface
 {
-    const ITEMS_DELIMITER = ';';
-    const ALGORITHM = 'sha512';
-    const IGNORED_KEYS = ['frame_mode'];
-
     /**
      * Secret key
      *
@@ -26,9 +24,14 @@ class SignatureHandler
      * __construct
      *
      * @param string $secretKey
+     * @throws InvalidStringException
      */
-    public function __construct(string $secretKey)
+    public function __construct($secretKey)
     {
+        if (!is_string($secretKey)) {
+            throw new InvalidStringException('secretKey', gettype($secretKey));
+        }
+
         $this->secretKey = $secretKey;
     }
 
@@ -38,10 +41,16 @@ class SignatureHandler
      * @param array $params
      * @param string $signature
      * @return boolean
+     * @throws InvalidStringException
      */
-    public function check(array $params, string $signature): bool
+    public function check(array $params, $signature)
     {
-        return $this->sign($params) === $signature;
+        $arg = 'signature';
+        if (!is_string($$arg)) {
+            throw new InvalidStringException($arg, gettype($$arg));
+        }
+
+        return $this->sign($params) === $$arg;
     }
 
     /**
@@ -50,7 +59,7 @@ class SignatureHandler
      * @param array $params
      * @return string
      */
-    public function sign(array $params): string
+    public function sign(array $params)
     {
         $stringToSign = implode(self::ITEMS_DELIMITER, $this->getParamsToSign($params, self::IGNORED_KEYS));
         return base64_encode(hash_hmac(self::ALGORITHM, $stringToSign, $this->secretKey, true));
@@ -65,12 +74,8 @@ class SignatureHandler
      * @param bool $sort
      * @return array
      */
-    private function getParamsToSign(
-        array $params,
-        array $ignoreParamKeys = [],
-        string $prefix = '',
-        bool $sort = true
-    ): array {
+    private function getParamsToSign(array $params, array $ignoreParamKeys = [], $prefix = '', $sort = true)
+    {
         $paramsToSign = [];
 
         foreach ($params as $key => $value) {

@@ -50,4 +50,16 @@ class GateTest extends TestCase
 
         self::assertInstanceOf(Callback::class, $callback);
     }
+
+//    public function testValidate()
+//    {
+//        $validator = $this->getMockBuilder(Gate::class)
+//            ->setConstructorArgs(['secret'])
+//            ->setMethods(['validateParams'])
+//            ->getMock();
+//
+//        $validator->expects($this->once())
+//            ->method('validateParams')
+//            ->will($this->returnValue('{}'));
+//    }
 }

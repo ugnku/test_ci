@@ -2,10 +2,13 @@
 
 namespace tci\tests;
 
+use PHPUnit\Framework\TestCase;
+use tci\exception\argument\InvalidStringException;
 use tci\exception\ProcessException;
 use tci\Gate;
+use tci\interfaces\SdkException;
 
-class CallbackTest extends \PHPUnit\Framework\TestCase
+class CallbackTest extends TestCase
 {
     /**
      * @var string
@@ -55,20 +58,35 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
     public function testGetCallbackException()
     {
         self::expectException(ProcessException::class);
-        $this->gate->handleCallback('qwerty');
+
+        try {
+            $this->gate->handleCallback('qwerty');
+        } catch (InvalidStringException $e) {
+            self::fail($e->getFormattedMessage());
+        }
     }
 
     public function testGetData()
     {
         $data = json_decode($this->dataRaw, true);
         self::assertEquals($data, $this->callback->getData());
-        self::assertEquals($data, $this->callback->toArray($this->dataRaw));
+
+        try {
+            self::assertEquals($data, $this->callback->toArray($this->dataRaw));
+        } catch (SdkException $e) {
+            self::fail($e->getFormattedMessage());
+        }
     }
 
     public function testToArrayException()
     {
         self::expectException(ProcessException::class);
-        $this->callback->toArray('qwerty');
+
+        try {
+            $this->callback->toArray('qwerty');
+        } catch (InvalidStringException $e) {
+            self::fail($e->getFormattedMessage());
+        }
     }
 
     public function testGetSignatureException()
@@ -80,6 +98,16 @@ class CallbackTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNullValue()
     {
-        self::assertNull($this->callback->getValue('test.test.test'));
+        try {
+            self::assertNull($this->callback->getValue('test.test.test'));
+        } catch (InvalidStringException $e) {
+            self::fail($e->getFormattedMessage());
+        }
+    }
+
+    public function testGetValueException()
+    {
+        self::expectException(InvalidStringException::class);
+        $this->callback->getValue(123);
     }
 }
