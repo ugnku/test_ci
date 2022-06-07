@@ -20,8 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         operating_system: ['ubuntu-latest']
-        php_versions: ['7.0', '7.1', '7.2', '7.3', '7.4']
-        experimental: [false]
+        php_versions: ['5.6']
+        experimental: [ true ]
         include:
           - operating_system: ubuntu-latest
             php_versions: '8.1'
