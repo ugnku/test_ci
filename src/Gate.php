@@ -74,6 +74,11 @@ class Gate implements GateInterface
         $this->validateParams = $flag;
     }
 
+    public function getValidationParams()
+    {
+        return $this->validateParams;
+    }
+
     /**
      * @param string $paymentBaseUrl
      * @return static

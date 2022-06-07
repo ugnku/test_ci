@@ -3,6 +3,8 @@
 namespace tci\tests;
 
 use PHPUnit\Framework\TestCase;
+use tci\exception\argument\InvalidIntegerException;
+use tci\exception\argument\InvalidStringException;
 use tci\Payment;
 
 class PaymentTest extends TestCase
@@ -37,5 +39,19 @@ class PaymentTest extends TestCase
         self::assertEquals('type', $payment->getParams()['card_operation_type']);
         self::expectException(\BadMethodCallException::class);
         $payment->nonExistantMethod();
+    }
+
+    public function testConstructorProjectIdException()
+    {
+        $this->expectException(InvalidIntegerException::class);
+
+        new Payment('test', 'test');
+    }
+
+    public function testConstructorPaymentIdException()
+    {
+        $this->expectException(InvalidStringException::class);
+
+        new Payment(123, 123);
     }
 }

@@ -86,42 +86,36 @@ class Callback implements CallbackInterface
      * Get payment info
      *
      * @return ?array
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getPayment()
     {
-        try {
-            return $this->getValue('payment');
-        } catch (InvalidStringException $e) {
-            return null;
-        }
+        return $this->getValue('payment');
     }
 
     /**
      * Get payment status
      *
      * @return ?string
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getPaymentStatus()
     {
-        try {
-            return $this->getValue('payment.status');
-        } catch (InvalidStringException $e) {
-            return null;
-        }
+        return $this->getValue('payment.status');
     }
 
     /**
      * Get payment ID
      *
      * @return ?string
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getPaymentId()
     {
-        try {
-            return $this->getValue('payment.id');
-        } catch (InvalidStringException $e) {
-            return null;
-        }
+        return $this->getValue('payment.id');
     }
 
     /**
@@ -129,16 +123,14 @@ class Callback implements CallbackInterface
      *
      * @return string
      * @throws ProcessException
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpUnhandledExceptionInspection
      */
     public function getSignature()
     {
-        try {
-            $signature = $this->getValue('signature')
-                ? $this->getValue('signature')
-                : $this->getValue('general.signature');
-        } catch (InvalidStringException $e) {
-            throw new ProcessException('Undefined signature', SdkException::UNDEFINED_SIGNATURE, $e);
-        }
+        $signature = $this->getValue('signature')
+            ? $this->getValue('signature')
+            : $this->getValue('general.signature');
 
         if (!$signature) {
             throw new ProcessException('Undefined signature', SdkException::UNDEFINED_SIGNATURE);

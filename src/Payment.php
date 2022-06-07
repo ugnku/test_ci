@@ -4,6 +4,7 @@ namespace tci;
 
 use BadMethodCallException;
 use DateTime;
+use tci\exception\argument\InvalidIntegerException;
 use tci\exception\argument\InvalidStringException;
 use tci\interfaces\PaymentInterface;
 
@@ -74,11 +75,12 @@ class Payment implements PaymentInterface
      * @param string $projectId
      * @param ?string $paymentId
      * @throws InvalidStringException
+     * @throws InvalidIntegerException
      */
     public function __construct($projectId, $paymentId = null)
     {
         if (!is_int($projectId)) {
-            throw new InvalidStringException('projectId', gettype($projectId));
+            throw new InvalidIntegerException('projectId', gettype($projectId));
         }
 
         if ($paymentId !== null && !is_string($paymentId)) {

@@ -3,6 +3,7 @@
 namespace tci\tests;
 
 use PHPUnit\Framework\TestCase;
+use tci\exception\argument\InvalidStringException;
 use tci\SignatureHandler;
 
 class SignatureHandlerTest extends TestCase
@@ -52,5 +53,17 @@ class SignatureHandlerTest extends TestCase
     public function testCheck()
     {
         self::assertTrue($this->handler->check($this->data, $this->signature));
+    }
+
+    public function testConstructorException()
+    {
+        self::expectException(InvalidStringException::class);
+        new SignatureHandler(123);
+    }
+
+    public function testCheckException()
+    {
+        self::expectException(InvalidStringException::class);
+        $this->handler->check([], 123);
     }
 }

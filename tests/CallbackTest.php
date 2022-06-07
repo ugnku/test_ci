@@ -3,6 +3,8 @@
 namespace tci\tests;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Call\Call;
+use tci\Callback;
 use tci\exception\argument\InvalidStringException;
 use tci\exception\ProcessException;
 use tci\Gate;
@@ -57,12 +59,12 @@ class CallbackTest extends TestCase
 
     public function testGetCallbackException()
     {
-        self::expectException(ProcessException::class);
-
         try {
             $this->gate->handleCallback('qwerty');
         } catch (InvalidStringException $e) {
             self::fail($e->getFormattedMessage());
+        } catch (ProcessException $e) {
+            self::assertEquals('Error on response decoding: Syntax error', $e->getFormattedMessage());
         }
     }
 
@@ -109,5 +111,17 @@ class CallbackTest extends TestCase
     {
         self::expectException(InvalidStringException::class);
         $this->callback->getValue(123);
+    }
+
+    public function testToArrayDataException()
+    {
+        self::expectException(InvalidStringException::class);
+        $this->callback->toArray(123);
+    }
+
+    public function testReadRaw()
+    {
+        $data = Callback::readData();
+        self::assertEquals('{}', $data);
     }
 }
