@@ -131,7 +131,7 @@ class Payment implements PaymentInterface
      */
     public function __call($name, $arguments)
     {
-        if (str_starts_with($name, 'set')) {
+        if (substr($name, 0, 3) === 'set') {
             $key = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', lcfirst(substr($name, 3))));
             $this->params[$key] = $arguments[0];
 
