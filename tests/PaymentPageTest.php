@@ -59,23 +59,6 @@ class PaymentPageTest extends TestCase
         );
     }
 
-    public function testGetValidationUrl()
-    {
-        $payment = new Payment(100);
-
-        $payment
-            ->setPaymentId('test payment id')
-            ->setPaymentDescription('B&W');
-
-        $url = $this->builder->getValidationUrl($payment);
-
-        self::assertEquals(
-            'https://sdk.ecommpay.com/params/check/?project_id=100&interface_type=%7B%22id%22%3A23%7D'
-            . '&payment_id=test+payment+id&payment_description=B%26W',
-            $url
-        );
-    }
-
     public function testConstructorException()
     {
         self::expectException(InvalidStringException::class);

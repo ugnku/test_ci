@@ -138,30 +138,30 @@ class Gate implements GateInterface
      */
     private function validateParams(PaymentInterface $payment)
     {
-        $requestUri = $this->urlBuilder->getValidationUrl($payment);
-        $stream = fopen($requestUri, 'r');
-        $errors = [];
-        $status = 0;
+        $url = $this->urlBuilder->getValidationUrl();
+        $content = http_build_query($payment->getParams());
+        $options = [
+            'http' => [
+                'header' => [
+                    'Content-type: application/x-www-form-urlencoded',
+                    'Content-Length: ' . strlen($content)
+                ],
+                'method'  => 'POST',
+                'content' => $content,
+                'ignore_errors' => true,
+            ]
+        ];
 
-        // Reverse required!!!
-        $headers = array_reverse(stream_get_meta_data($stream)['wrapper_data']);
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, true, $context);
 
-        foreach ($headers as $header) {
-            if (preg_match('/^HTTP\/\d.\d (\d+) /', $header, $match)) {
-                $status = (int) $match[1];
-                break;
-            }
+        if ($result === false) {
         }
 
-        if ($status !== 200) {
-            $data = json_decode(stream_get_contents($stream));
-            $errors = $data['errors'];
-        }
+        $data = json_decode($result, true);
 
-        fclose($stream);
-
-        if (count($errors) > 0) {
-            throw new ValidationException($errors);
+        if (count($data['errors']) > 0) {
+            throw new ValidationException($data['errors']);
         }
     }
 }

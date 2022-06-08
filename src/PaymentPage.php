@@ -82,12 +82,11 @@ class PaymentPage implements UrlBuilderInterface
     /**
      * @inheritDoc
      */
-    public function getValidationUrl(PaymentInterface $payment)
+    public function getValidationUrl()
     {
         return sprintf(
             self::VALIDATOR_URL_PATTERN,
-            $this->apiUrl,
-            http_build_query($payment->getParams())
+            $this->apiUrl
         );
     }
 }

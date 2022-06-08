@@ -9,7 +9,7 @@ interface UrlBuilderInterface
 {
     const
         PAYMENT_URL_PATTERN = '%s/payment/?%s&signature=%s',
-        VALIDATOR_URL_PATTERN = '%s/params/check/?%s';
+        VALIDATOR_URL_PATTERN = '%s/v1/params/check';
 
     /**
      * @param string $baseUrl
@@ -28,8 +28,7 @@ interface UrlBuilderInterface
     /**
      * Return full URL for check payment parameters.
      *
-     * @param PaymentInterface $payment
      * @return string
      */
-    public function getValidationUrl(PaymentInterface $payment);
+    public function getValidationUrl();
 }

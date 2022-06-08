@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use tci\Callback;
 use tci\exception\argument\InvalidBoolException;
 use tci\exception\argument\InvalidStringException;
+use tci\exception\ValidationException;
 use tci\Gate;
 use tci\Payment;
 
@@ -58,6 +59,17 @@ class GateTest extends TestCase
         self::assertEquals($this->gate->getValidationParams(), false);
         $this->gate->setValidationParams(true);
         self::assertEquals($this->gate->getValidationParams(), true);
+    }
+
+    public function testValidateParam()
+    {
+        $gate = new Gate('');
+        $gate->setValidationParams(true);
+        $payment = new Payment(8311, 'test_payment_sdk_php');
+        $payment->setAccountToken(123);
+        self::expectException(ValidationException::class);
+
+        $gate->getPurchasePaymentPageUrl($payment);
     }
 
     public function testConstructorSecretException()
